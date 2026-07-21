@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 :: Force UTF-8 encoding for clean character rendering
 chcp 65001 >nul
 
