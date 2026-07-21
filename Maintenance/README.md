@@ -27,7 +27,7 @@ Equipped with an interactive GUI engine that automatically detects and lists all
 ### Method 1: Interactive GUI Launcher (Recommended)
 1. Open the **`Maintenance/`** folder.
 2. Right-click **`Run-All-Maintenance.bat`** and select **Run as Administrator**.
-3. Select the tasks you wish to run, check **Create System Restore Point** for safety, and click **Run Selected Maintenance**.
+3. Select the tasks you wish to run, keep **Create System Restore Point** checked for safety, and click **Run Selected Maintenance**.
 
 ### Method 2: Individual Batch Scripts
 You can also run any script standalone by right-clicking it and selecting **Run as Administrator**.
