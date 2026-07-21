@@ -1,32 +1,38 @@
-## 🚀 Quick Start: Tweaks & Debloat (`/Tweaks`)
+# Windows Debloat & Tweaks Engine
 
-The scripts in this directory remove built-in Windows bloatware, disable telemetry, location, and AI tracking, clean up background network usage, and customize the desktop interface.
-
-### ⚙️ How to Run:
-* **Run All Core Tweaks (Automated):** Right-click **`Run-All-Tweaks.bat`** and select **Run as Administrator**.
-* **Run Individual Tweaks:** Right-click any specific `.ps1` file and select **Run with PowerShell** (ensure Admin rights).
+A modular, GUI-driven PowerShell toolkit designed to debloat Windows, disable telemetry, block ads, and optimize system performance.
 
 ---
 
-### 📦 Core System Tweaks (Automated via `Run-All-Tweaks.bat`)
+## ⚡ Features
 
-| Script Name | Target Area | Primary Action |
-| :--- | :--- | :--- |
-| **`Debloat-Apps.ps1`** | Apps | Uninstalls pre-installed UWP bloatware (Xbox, Solitaire, Bing apps, etc.). |
-| **`Disable-ConsumerFeatures.ps1`** | System Bloat | Blocks auto-installing apps (Candy Crush) and Windows Spotlight content. |
-| **`Disable-PrivacyAndAds.ps1`** | Privacy & Ads | Blocks activity history, targeted advertising, lock screen/Edge ads, location tracking, Find My Device, and hides Settings 'Home'. |
-| **`Disable-SearchBloat.ps1`** | Search / Explorer | Disables Cortana, removes Bing web search from Start, and strips `Gallery` / `OneDrive` from the sidebar. |
-| **`Disable-TelemetryServices.ps1`** | Services & Bandwidth | Stops `DiagTrack` service, clears diagnostic logs, and turns off P2P Delivery Optimization background uploads. |
-| **`Enable-StorageSense.ps1`** | Storage | Configures Windows Storage Sense for automated background temporary file cleanup. |
-| **`Disable-CopilotAI.ps1`** | AI & Recall | Disables Copilot, Recall snapshots, Click to Do, `WSAIFabricSvc`, Paint AI, Notepad AI, and Edge AI integrations. |
-| **`Disable-Widgets.ps1`** | Taskbar | Hides the Taskbar Widgets icon and kills the background News & Interests process (`TaskbarDa`). |
-| **`Enable-ClassicContextMenu.ps1`** | Interface | Restores the full, traditional Windows 10 right-click context menu in Windows 11. |
-| **`Disable-GameDVR.ps1`** | Performance | Disables Xbox Game DVR background screen capture to free up CPU and GPU overhead. |
+* **Dynamic Script Loader:** Automatically detects all `.ps1` scripts in the directory—add, remove, or edit tweak files without changing any launcher code.
+* **Granular App Debloater:** Interactive GUI allowing you to pick and choose exactly which built-in Windows apps and bloatware to remove.
+* **Clean System Purge:** Removes both active user packages and provisioned app stubs (`Remove-AppxProvisionedPackage`) to prevent Windows from auto-reinstalling bloatware during updates.
+* **Safe & Non-Destructive:** Granular check-box selection for both script modules and individual apps—never forces a one-size-fits-all tweak.
 
 ---
 
-### 🌐 Optional / App-Specific Tweaks (Run On-Demand)
+## 🛠️ Included Tweak Modules
 
-* **`Debloat-BraveBrowser.ps1`**  
-  * **Description:** Checks if Brave Browser is installed. If detected, applies group policies to disable built-in bloat features including **Leo AI Chat, Crypto Wallet, Brave VPN, Brave News, Brave Rewards, and Brave Talk**.
-  * **Usage:** Safe to run manually at any time without modifying systems where Brave is not installed.
+| Module | Focus Area |
+| :--- | :--- |
+| **Debloat Apps** | Removes pre-installed UWP bloatware, games, and OEM packages. |
+| **Disable Copilot & AI** | Disables Windows Copilot, Recall, and AI Hub integrations. |
+| **Disable Privacy & Ads** | Turns off advertising ID, tailored experiences, and diagnostic tracking. |
+| **Disable Search Bloat** | Removes web search, Bing integrations, and ads from the Start Menu/Search. |
+| **Disable Telemetry Services** | Stops background diagnostic data collection services. |
+| **Disable Consumer Features** | Prevents Windows from automatically downloading recommended apps/games. |
+| **Disable Widgets** | Removes the Widgets board and taskbar button. |
+| **Disable Game DVR** | Turns off background Xbox game recording to free up system resources. |
+| **Enable Storage Sense** | Enables automated temporary file cleanup. |
+| **Enable Classic Context Menu** | Restores the legacy Windows 10 right-click menu (Windows 11). |
+
+---
+
+## 🚀 How to Use
+
+1. Download or clone this repository.
+2. Right-click **`Run-All-Tweaks.bat`** and select **Run as Administrator**.
+3. **Master Tweaks GUI:** Select which tweak modules you want to apply, then click **Run Selected Tweaks**.
+4. **App Selection GUI:** If *Debloat Apps* is selected, a second popup will appear letting you pick specific apps to keep or remove.
