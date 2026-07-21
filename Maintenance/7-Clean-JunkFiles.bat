@@ -2,23 +2,20 @@
 chcp 65001 >nul
 net session >nul 2>&1
 if %errorLevel% NEQ 0 (
-    echo ============================================================
-    echo ERROR: Please run this file as ADMINISTRATOR!
-    echo Right-click and select "Run as administrator".
-    echo ============================================================
+    echo [!] ERROR: Please run this file as ADMINISTRATOR!
     pause
     exit /b
 )
 
-title [Maintenance] Clean System Temp & Cache Files
+title [Maintenance] Clean System Temp and Cache Files
 color 0B
 
 echo ============================================================
-echo              CLEANING TEMPORARY FILES & CACHES              
+echo            CLEANING TEMPORARY FILES AND CACHES             
 echo ============================================================
 echo.
 
-echo [+] Cleaning User & System Temp folders...
+echo [+] Cleaning User and System Temp folders...
 del /q /f /s "%TEMP%\*" >nul 2>&1
 del /q /f /s "%SystemRoot%\Temp\*" >nul 2>&1
 
@@ -36,4 +33,3 @@ echo Done! Temporary files and caches have been cleaned.
 echo ------------------------------------------------------------
 echo.
 pause
-exit /b
