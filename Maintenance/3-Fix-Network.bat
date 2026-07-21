@@ -1,24 +1,30 @@
 ﻿@echo off
 chcp 65001 >nul
 net session >nul 2>&1
-if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
+if %errorLevel% neq 0 (echo [!] Please run as Administrator! & pause & exit /b)
 
 title [Maintenance] Network Reset
-echo === COMPLETE NETWORK FLUSH AND RESET ===
+color 0B
+
+echo ===================================================
+echo               Resetting Network Stack              
+echo ===================================================
 echo.
-echo Flushing DNS cache...
+
+echo [+] Flushing DNS cache...
 ipconfig /flushdns
-echo Releasing current IP address...
-ipconfig /release
-echo Renewing IP address...
-ipconfig /renew
+
+echo [+] Releasing and renewing IP address...
+ipconfig /release >nul 2>&1
+ipconfig /renew >nul 2>&1
+
+echo [+] Resetting Winsock and TCP/IP stack...
+netsh winsock reset >nul
+netsh int ip reset >nul
+
 echo.
-echo Resetting network protocols (Winsock and IP)...
-netsh winsock reset
-netsh int ip reset
-netsh int tcp reset
+echo ===================================================
+echo             Network Reset Completed!               
+echo ===================================================
 echo.
-echo Done! The computer MUST be restarted to apply changes.
-set /p choice="Do you want to restart NOW? (Y/N): "
-if /i "%choice%"=="Y" shutdown /r /t 5
-exit
+pause

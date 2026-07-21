@@ -1,16 +1,39 @@
 ﻿@echo off
+:: Force UTF-8 encoding for clean character rendering
 chcp 65001 >nul
+
+:: Ensure Administrator privileges
 net session >nul 2>&1
-if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
+if %errorLevel% neq 0 (
+    echo [!] Error: Please run this script as Administrator!
+    pause
+    exit /b
+)
 
 title [Maintenance] Windows System Repair
-echo === STARTING SYSTEM REPAIR ===
+color 0B
+
+echo ===================================================
+echo             Windows System File Repair             
+echo ===================================================
 echo.
-echo [Step 1/2] Restoring system image (DISM)...
+
+echo [+] Step 1/2: Repairing Windows System Image (DISM)...
+echo     This may take several minutes. Please do not close this window.
+echo.
 DISM /Online /Cleanup-Image /RestoreHealth
+
 echo.
-echo [Step 2/2] Scanning system files (SFC)...
+echo ---------------------------------------------------
+echo.
+
+echo [+] Step 2/2: Scanning and Repairing System Files (SFC)...
+echo.
 sfc /scannow
+
 echo.
-echo Repair process finished!
+echo ===================================================
+echo          System Repair Process Completed!           
+echo ===================================================
+echo.
 pause

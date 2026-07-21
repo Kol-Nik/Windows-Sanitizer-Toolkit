@@ -11,7 +11,11 @@ if %errorLevel% NEQ 0 (
 )
 
 title [Maintenance] Energy Efficiency and Battery Analysis
-echo === STARTING ENERGY ANALYSIS (RECOMMENDED FOR LAPTOPS) ===
+color 0B
+
+echo ============================================================
+echo      STARTING ENERGY ANALYSIS (RECOMMENDED FOR LAPTOPS)     
+echo ============================================================
 echo.
 echo Please close all other running programs for more accurate results.
 echo The system will analyze the computer for 60 seconds...
@@ -30,4 +34,4 @@ echo ------------------------------------------------------------
 echo.
 set /p open_report="Do you want to open the report in your browser NOW? (Y/N): "
 if /i "%open_report%"=="Y" start "" "%REPORT_PATH%"
-exit
+exit /b

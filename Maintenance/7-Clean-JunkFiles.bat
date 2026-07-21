@@ -11,7 +11,11 @@ if %errorLevel% NEQ 0 (
 )
 
 title [Maintenance] Clean System Temp & Cache Files
-echo === CLEANING TEMPORARY FILES & CACHES ===
+color 0B
+
+echo ============================================================
+echo              CLEANING TEMPORARY FILES & CACHES              
+echo ============================================================
 echo.
 
 echo [+] Cleaning User & System Temp folders...
@@ -32,4 +36,4 @@ echo Done! Temporary files and caches have been cleaned.
 echo ------------------------------------------------------------
 echo.
 pause
-exit
+exit /b

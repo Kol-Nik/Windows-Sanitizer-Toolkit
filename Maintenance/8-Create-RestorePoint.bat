@@ -11,7 +11,11 @@ if %errorLevel% NEQ 0 (
 )
 
 title [Maintenance] Create System Restore Point
-echo === CREATING SYSTEM RESTORE POINT ===
+color 0B
+
+echo ============================================================
+echo               CREATING SYSTEM RESTORE POINT                 
+echo ============================================================
 echo.
 
 powershell -ExecutionPolicy Bypass -Command "Enable-ComputerRestore -Drive '$env:SystemDrive' -ErrorAction SilentlyContinue; Checkpoint-Computer -Description 'Manual Maintenance Checkpoint' -RestorePointType 'MODIFY_SETTINGS'"
@@ -22,4 +26,4 @@ echo Done! System restore point created successfully.
 echo ------------------------------------------------------------
 echo.
 pause
-exit
+exit /b

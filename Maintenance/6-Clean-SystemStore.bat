@@ -1,10 +1,21 @@
 ﻿@echo off
 chcp 65001 >nul
 net session >nul 2>&1
-if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
+if %errorLevel% NEQ 0 (
+    echo ============================================================
+    echo ERROR: Please run this file as ADMINISTRATOR!
+    echo Right-click and select "Run as administrator".
+    echo ============================================================
+    pause
+    exit /b
+)
 
 title [Maintenance] Deep WinSxS Cleanup (Component Store)
-echo === STARTING DEEP SYSTEM CLEANUP ===
+color 0B
+
+echo ============================================================
+echo                STARTING DEEP SYSTEM CLEANUP                
+echo ============================================================
 echo.
 echo NOTE: This process removes old versions of Windows Update files.
 echo It will free up significant disk space, but you won't be able to uninstall current updates.
@@ -20,3 +31,4 @@ del /q /f /s %WINDIR%\Temp\* >nul 2>&1
 echo.
 echo Cleanup completed successfully!
 pause
+exit /b

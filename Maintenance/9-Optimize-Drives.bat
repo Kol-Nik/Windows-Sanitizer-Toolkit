@@ -11,7 +11,11 @@ if %errorLevel% NEQ 0 (
 )
 
 title [Maintenance] Optimize Drives (TRIM / Defrag)
-echo === OPTIMIZING DRIVES ===
+color 0B
+
+echo ============================================================
+echo                    OPTIMIZING DRIVES                       
+echo ============================================================
 echo.
 echo Re-trimming SSDs and defragmenting HDDs...
 echo.
@@ -24,4 +28,4 @@ echo Done! Drive optimization complete.
 echo ------------------------------------------------------------
 echo.
 pause
-exit
+exit /b
