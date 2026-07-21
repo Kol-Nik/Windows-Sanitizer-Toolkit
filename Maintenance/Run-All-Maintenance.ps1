@@ -9,25 +9,27 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-# --- Script Scanner & Metadata Mapper ---
+# --- Helper Functions ---
+function Format-MaintName ($FileName) {
+    $NameWithoutExt = [System.IO.Path]::GetFileNameWithoutExtension($FileName)
+    if ($NameWithoutExt -match '^(\d+)[\s\-]+(.*)') {
+        $Num = $Matches[1]
+        $Text = $Matches[2] -replace '[\-_]', ' '
+        return "$Num. $Text"
+    }
+    return ($NameWithoutExt -replace '[\-_]', ' ')
+}
+
+# --- Script Scanner ---
 $ScriptDir = $PSScriptRoot
 if (-not $ScriptDir) { $ScriptDir = Get-Location }
 
 # Get all .bat files excluding launcher scripts
-$MaintFiles = Get-ChildItem -Path $ScriptDir -Filter "*.bat" | Where-Object { $_.Name -ne "Run-All-Maintenance.bat" } | Sort-Object Name
+$MaintFiles = Get-ChildItem -Path $ScriptDir -Filter "*.bat" | Where-Object { $_.Name -notlike "Run-All-*" } | Sort-Object Name
 
 if ($MaintFiles.Count -eq 0) {
     [System.Windows.Forms.MessageBox]::Show("No maintenance scripts (.bat) were found in $ScriptDir", "Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
     Exit
-}
-
-# Clean titles automatically from filenames (e.g., 1-Update-Apps -> Update Apps)
-function Format-MaintName ($FileName) {
-    $NameWithoutExt = [System.IO.Path]::GetFileNameWithoutExtension($FileName)
-    # Remove leading numbers and dashes (e.g. "1-" or "01 - ")
-    $CleanName = $NameWithoutExt -replace '^\d+[\s\-]*', ''
-    # Insert space before capital letters if squished together
-    return ($CleanName -creplace '(?<=[a-z])(?=[A-Z])', ' ')
 }
 
 # --- Build GUI ---
@@ -51,15 +53,16 @@ $TreeView.Location = New-Object System.Drawing.Point(15, 38)
 $TreeView.Size = New-Object System.Drawing.Size(535, 450)
 $TreeView.CheckBoxes = $true
 
-# Populate TreeView dynamically from directory files
+# Set Root Node FIRST before populating child nodes
 $RootNode = $TreeView.Nodes.Add("All Maintenance Tasks")
 $RootNode.Tag = "Root"
 
+# Populate TreeView dynamically from directory files
 foreach ($File in $MaintFiles) {
     $FriendlyTitle = Format-MaintName -FileName $File.Name
-    $Node = $RootNode.Nodes.Add("$($File.Name) - $FriendlyTitle")
+    $Node = $RootNode.Nodes.Add($FriendlyTitle)
     $Node.Tag = $File.FullName
-    $Node.Checked = $false  # Default unchecked for safer selective running
+    $Node.Checked = $false
 }
 
 $RootNode.Expand()
@@ -139,9 +142,9 @@ if ($Result -eq [System.Windows.Forms.DialogResult]::OK) {
             try {
                 Enable-ComputerRestore -Drive "$env:SystemDrive" -ErrorAction SilentlyContinue
                 Checkpoint-Computer -Description "Pre-Maintenance System Checkpoint" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
-                Write-Host "    [✓] Restore Point created successfully." -ForegroundColor Green
+                Write-Host "    [OK] Restore Point created successfully." -ForegroundColor Green
             } catch {
-                Write-Host "    (!) Could not create Restore Point: $_" -ForegroundColor Yellow
+                Write-Host "    [WARN] Could not create Restore Point: $_" -ForegroundColor Yellow
             }
             Write-Host ""
         }
@@ -151,10 +154,10 @@ if ($Result -eq [System.Windows.Forms.DialogResult]::OK) {
             Write-Host "[+] Launching Task: $ScriptName..." -ForegroundColor Cyan
             
             try {
-                # Launch batch file synchronously and wait for exit
+                # Launch batch file synchronously and wait for completion
                 Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$ScriptPath`"" -Wait -NoNewWindow
             } catch {
-                Write-Host "    (!) Error executing $ScriptName : $_" -ForegroundColor Red
+                Write-Host "    [ERROR] Error executing $ScriptName : $_" -ForegroundColor Red
             }
             Write-Host ""
         }
