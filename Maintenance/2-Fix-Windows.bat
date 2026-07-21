@@ -1,11 +1,14 @@
-﻿@echo off
+@echo off
 :: Force UTF-8 encoding for clean character rendering
 chcp 65001 >nul
 
 :: Ensure Administrator privileges
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo [!] Error: Please run this script as Administrator!
+    echo ============================================================
+    echo ERROR: Please run this file as ADMINISTRATOR!
+    echo Right-click and select "Run as administrator".
+    echo ============================================================
     pause
     exit /b
 )
