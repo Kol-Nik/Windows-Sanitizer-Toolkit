@@ -107,7 +107,6 @@ $AppCategories = [ordered]@{
         @{ Name = "Office Hub"; Package = "*Microsoft.MicrosoftOfficeHub*" }
         @{ Name = "One Calendar"; Package = "*OneCalendar*" }
         @{ Name = "One Connect"; Package = "*Microsoft.OneConnect*" }
-        @{ Name = "OneDrive"; Package = "*Microsoft.OneDrive*" }
         @{ Name = "OneNote"; Package = "*Microsoft.Office.OneNote*" }
         @{ Name = "Outlook for Windows"; Package = "*Microsoft.OutlookForWindows*" }
         @{ Name = "Power Automate"; Package = "*Microsoft.PowerAutomateDesktop*" }
