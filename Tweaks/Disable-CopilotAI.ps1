@@ -4,43 +4,56 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Break
 }
 
-Write-Host "Disabling Windows Copilot, Recall, Edge AI, and App AI Features..." -ForegroundColor Yellow
+Write-Host "=== Disabling Windows Copilot, Recall, AI Services, and App AI Features ===" -ForegroundColor Yellow
 
-# Disable Copilot Taskbar Button for Current User
+# 1. Disable Copilot Taskbar Button for Current User
 $AdvancedExplorer = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 if (-not (Test-Path $AdvancedExplorer)) { New-Item -Path $AdvancedExplorer -Force | Out-Null }
-Set-ItemProperty -Path $AdvancedExplorer -Name "ShowCopilotButton" -Value 0 -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $AdvancedExplorer -Name "ShowCopilotButton" -Value 0 -Type DWord -ErrorAction SilentlyContinue
 
-# Disable Copilot Group Policies (User & System)
-New-Item -Path "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot" -Force | Out-Null
-Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot" -Name "TurnOffWindowsCopilot" -Value 1 -ErrorAction SilentlyContinue
+# 2. Disable Copilot Group Policies (User & System)
+$UserCopilot = "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot"
+if (-not (Test-Path $UserCopilot)) { New-Item -Path $UserCopilot -Force | Out-Null }
+Set-ItemProperty -Path $UserCopilot -Name "TurnOffWindowsCopilot" -Value 1 -Type DWord -ErrorAction SilentlyContinue
 
-New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot" -Force | Out-Null
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot" -Name "TurnOffWindowsCopilot" -Value 1 -ErrorAction SilentlyContinue
+$SysCopilot = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot"
+if (-not (Test-Path $SysCopilot)) { New-Item -Path $SysCopilot -Force | Out-Null }
+Set-ItemProperty -Path $SysCopilot -Name "TurnOffWindowsCopilot" -Value 1 -Type DWord -ErrorAction SilentlyContinue
 
-# Disable Windows Recall & AI Data Snapshots
+# 3. Disable Windows AI Policies (Recall, Snapshots, Click to Do, Settings Agent)
 $WinAI = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"
-New-Item -Path $WinAI -Force | Out-Null
-Set-ItemProperty -Path $WinAI -Name "DisableAIDataAnalysis" -Value 1 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $WinAI -Name "AllowRecallEnablement" -Value 0 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $WinAI -Name "TurnOffSavingSnapshots" -Value 1 -ErrorAction SilentlyContinue
+if (-not (Test-Path $WinAI)) { New-Item -Path $WinAI -Force | Out-Null }
+Set-ItemProperty -Path $WinAI -Name "DisableAIDataAnalysis" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $WinAI -Name "AllowRecallEnablement" -Value 0 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $WinAI -Name "TurnOffSavingSnapshots" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $WinAI -Name "DisableClickToDo" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $WinAI -Name "DisableSettingsAgent" -Value 1 -Type DWord -ErrorAction SilentlyContinue
 
-# Disable Paint AI Features (Cocreator, Generative Fill, Image Creator)
+# 4. Disable Paint AI Features (Cocreator, Generative Fill, Image Creator)
 $Paint = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint"
-New-Item -Path $Paint -Force | Out-Null
-Set-ItemProperty -Path $Paint -Name "DisableCocreator" -Value 1 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $Paint -Name "DisableGenerativeFill" -Value 1 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $Paint -Name "DisableImageCreator" -Value 1 -ErrorAction SilentlyContinue
+if (-not (Test-Path $Paint)) { New-Item -Path $Paint -Force | Out-Null }
+Set-ItemProperty -Path $Paint -Name "DisableCocreator" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $Paint -Name "DisableGenerativeFill" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $Paint -Name "DisableImageCreator" -Value 1 -Type DWord -ErrorAction SilentlyContinue
 
-# Disable Notepad AI Features
-New-Item -Path "HKLM:\SOFTWARE\Policies\WindowsNotepad" -Force | Out-Null
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\WindowsNotepad" -Name "DisableAIFeatures" -Value 1 -ErrorAction SilentlyContinue
+# 5. Disable Notepad AI Features
+$Notepad = "HKLM:\SOFTWARE\Policies\WindowsNotepad"
+if (-not (Test-Path $Notepad)) { New-Item -Path $Notepad -Force | Out-Null }
+Set-ItemProperty -Path $Notepad -Name "DisableAIFeatures" -Value 1 -Type DWord -ErrorAction SilentlyContinue
 
-# Disable Edge AI, Copilot Sidebar & Bing Chat on New Tab
+# 6. Disable Edge AI, Copilot Sidebar & Bing Chat
 $Edge = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
-New-Item -Path $Edge -Force | Out-Null
-Set-ItemProperty -Path $Edge -Name "CopilotPageContext" -Value 0 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $Edge -Name "NewTabPageBingChatEnabled" -Value 0 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $Edge -Name "HubsSidebarEnabled" -Value 0 -ErrorAction SilentlyContinue
+if (-not (Test-Path $Edge)) { New-Item -Path $Edge -Force | Out-Null }
+Set-ItemProperty -Path $Edge -Name "CopilotPageContext" -Value 0 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $Edge -Name "NewTabPageBingChatEnabled" -Value 0 -Type DWord -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $Edge -Name "HubsSidebarEnabled" -Value 0 -Type DWord -ErrorAction SilentlyContinue
 
-Write-Host "All Windows Copilot and AI features disabled successfully!" -ForegroundColor Green
+# 7. Stop and Disable WSAIFabricSvc (Windows AI Fabric Service)
+$AIService = "WSAIFabricSvc"
+if (Get-Service -Name $AIService -ErrorAction SilentlyContinue) {
+    Stop-Service -Name $AIService -Force -ErrorAction SilentlyContinue
+    Set-Service -Name $AIService -StartupType Disabled -ErrorAction SilentlyContinue
+    Write-Host "[+] Disabled $AIService (Windows AI Fabric Service)" -ForegroundColor Green
+}
+
+Write-Host "[+] All Windows Copilot, Recall, Edge AI, and App AI features disabled successfully!" -ForegroundColor Green
