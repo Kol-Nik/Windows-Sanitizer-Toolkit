@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 title [1/6] Software Updates
 echo === CHECKING AND UPDATING INSTALLED APPLICATIONS ===
