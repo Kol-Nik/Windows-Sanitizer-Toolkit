@@ -3,7 +3,7 @@ chcp 65001 >nul
 net session >nul 2>&1
 if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
 
-title [4/6] Hardware Diagnostics
+title [Maintenance] Hardware Diagnostics
 echo === HARDWARE HEALTH CHECK ===
 echo.
 echo [1/3] Quick physical disk status:
