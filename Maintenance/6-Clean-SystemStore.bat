@@ -3,7 +3,7 @@ chcp 65001 >nul
 net session >nul 2>&1
 if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
 
-title [6/6] Deep WinSxS Cleanup (Component Store)
+title [Maintenance] Deep WinSxS Cleanup (Component Store)
 echo === STARTING DEEP SYSTEM CLEANUP ===
 echo.
 echo NOTE: This process removes old versions of Windows Update files.
