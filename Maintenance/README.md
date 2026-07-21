@@ -1,6 +1,8 @@
 # ⚙️ System Maintenance Suite
 
-A lightweight collection of batch scripts designed to repair system files, optimize drive performance, clear junk cache, update software, and diagnose hardware issues.
+A lightweight collection of batch scripts and an interactive PowerShell GUI designed to repair system files, optimize drive performance, clear junk cache, update software, and diagnose hardware issues.
+
+Equipped with an interactive GUI engine that automatically detects and lists all available maintenance scripts.
 
 ---
 
@@ -22,8 +24,12 @@ A lightweight collection of batch scripts designed to repair system files, optim
 
 ## 🚀 How to Run
 
+### Method 1: Interactive GUI Launcher (Recommended)
 1. Open the **`Maintenance/`** folder.
-2. Right-click any `.bat` script you wish to run and select **Run as Administrator**.
-3. Follow the on-screen prompts in the Command Prompt window.
+2. Right-click **`Run-All-Maintenance.bat`** and select **Run as Administrator**.
+3. Select the tasks you wish to run, check **Create System Restore Point** for safety, and click **Run Selected Maintenance**.
 
-> **Tip:** Running **`8-Create-RestorePoint.bat`** first is recommended before performing deep repairs or component store cleanups.
+### Method 2: Individual Batch Scripts
+You can also run any script standalone by right-clicking it and selecting **Run as Administrator**.
+
+> **Note:** Any new `.bat` script added to the `Maintenance` folder will be dynamically discovered by `Run-All-Maintenance.ps1` on launch.
