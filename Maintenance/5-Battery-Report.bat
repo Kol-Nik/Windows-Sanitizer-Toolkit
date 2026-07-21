@@ -10,7 +10,7 @@ if %errorLevel% NEQ 0 (
     exit /b
 )
 
-title [5/6] Energy Efficiency and Battery Analysis
+title [Maintenance] Energy Efficiency and Battery Analysis
 echo === STARTING ENERGY ANALYSIS (RECOMMENDED FOR LAPTOPS) ===
 echo.
 echo Please close all other running programs for more accurate results.
