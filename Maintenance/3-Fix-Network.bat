@@ -3,7 +3,7 @@ chcp 65001 >nul
 net session >nul 2>&1
 if %errorLevel% NEQ 0 (echo Please run as Administrator! & pause & exit /b)
 
-title [3/6] Network Reset
+title [Maintenance]  Network Reset
 echo === COMPLETE NETWORK FLUSH AND RESET ===
 echo.
 echo Flushing DNS cache...
