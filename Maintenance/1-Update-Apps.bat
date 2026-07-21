@@ -1,11 +1,10 @@
 @echo off
-:: Force UTF-8 encoding for clean character rendering
 chcp 65001 >nul
 
 :: Ensure Administrator privileges
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo [!] Error: Please run this script as Administrator!
+    echo [!] ERROR: Please run this script as Administrator!
     pause
     exit /b
 )
@@ -18,12 +17,14 @@ echo             Updating Installed Applications
 echo ===================================================
 echo.
 
-echo [+] Checking Winget repository for updates...
-echo     This may take a few minutes depending on your internet connection.
+echo [+] Refreshing Winget package sources...
+winget source update >nul 2>&1
+
+echo [+] Checking for software updates...
+echo     This may take a few minutes. Please wait...
 echo.
 
-:: Automatically accept package agreements and handle updates quietly
-winget upgrade --all --include-unknown --accept-package-agreements --accept-source-agreements
+winget upgrade --all --include-unknown --accept-package-agreements --accept-source-agreements --disable-interactivity
 
 echo.
 echo ===================================================
