@@ -20,17 +20,16 @@ if ($TweakFiles.Count -eq 0) {
     Exit
 }
 
-# Map clean titles and descriptions automatically
+# Map clean titles automatically
 function Format-TweakName ($FileName) {
     $NameWithoutExt = [System.IO.Path]::GetFileNameWithoutExtension($FileName)
-    # Inserts space before capital letters (e.g. DisablePrivacyAndAds -> Disable Privacy And Ads)
     return ($NameWithoutExt -creplace '(?<=[a-z])(?=[A-Z])', ' ')
 }
 
 # --- Build GUI ---
 $Form = New-Object System.Windows.Forms.Form
 $Form.Text = "Windows Debloat & Tweaks Engine"
-$Form.Size = New-Object System.Drawing.Size(580, 640)
+$Form.Size = New-Object System.Drawing.Size(580, 680)
 $Form.StartPosition = "CenterScreen"
 $Form.FormBorderStyle = "FixedDialog"
 $Form.MaximizeBox = $false
@@ -45,7 +44,7 @@ $Form.Controls.Add($TopLabel)
 # Main TreeView
 $TreeView = New-Object System.Windows.Forms.TreeView
 $TreeView.Location = New-Object System.Drawing.Point(15, 38)
-$TreeView.Size = New-Object System.Drawing.Size(535, 480)
+$TreeView.Size = New-Object System.Drawing.Size(535, 450)
 $TreeView.CheckBoxes = $true
 
 # Populate TreeView dynamically from directory files
@@ -73,10 +72,18 @@ $TreeView.add_AfterCheck({
     }
 })
 
+# System Restore Point Checkbox
+$RestorePointChk = New-Object System.Windows.Forms.CheckBox
+$RestorePointChk.Text = "Create System Restore Point before running tweaks"
+$RestorePointChk.Location = New-Object System.Drawing.Point(15, 500)
+$RestorePointChk.Size = New-Object System.Drawing.Size(535, 24)
+$RestorePointChk.Checked = $true
+$Form.Controls.Add($RestorePointChk)
+
 # Select All Button
 $SelectAllBtn = New-Object System.Windows.Forms.Button
 $SelectAllBtn.Text = "Select All"
-$SelectAllBtn.Location = New-Object System.Drawing.Point(15, 530)
+$SelectAllBtn.Location = New-Object System.Drawing.Point(15, 570)
 $SelectAllBtn.Size = New-Object System.Drawing.Size(100, 32)
 $SelectAllBtn.add_Click({
     $RootNode.Checked = $true
@@ -87,7 +94,7 @@ $Form.Controls.Add($SelectAllBtn)
 # Deselect All Button
 $DeselectAllBtn = New-Object System.Windows.Forms.Button
 $DeselectAllBtn.Text = "Deselect All"
-$DeselectAllBtn.Location = New-Object System.Drawing.Point(125, 530)
+$DeselectAllBtn.Location = New-Object System.Drawing.Point(125, 570)
 $DeselectAllBtn.Size = New-Object System.Drawing.Size(100, 32)
 $DeselectAllBtn.add_Click({
     $RootNode.Checked = $false
@@ -98,7 +105,7 @@ $Form.Controls.Add($DeselectAllBtn)
 # Run Tweaks Button
 $RunBtn = New-Object System.Windows.Forms.Button
 $RunBtn.Text = "Run Selected Tweaks"
-$RunBtn.Location = New-Object System.Drawing.Point(365, 530)
+$RunBtn.Location = New-Object System.Drawing.Point(365, 570)
 $RunBtn.Size = New-Object System.Drawing.Size(185, 32)
 $RunBtn.DialogResult = [System.Windows.Forms.DialogResult]::OK
 $Form.Controls.Add($RunBtn)
@@ -119,9 +126,25 @@ if ($Result -eq [System.Windows.Forms.DialogResult]::OK) {
     if ($SelectedScripts.Count -gt 0) {
         Clear-Host
         Write-Host "===================================================" -ForegroundColor Green
-        Write-Host "       Executing Selected Tweaks & Debloat          " -ForegroundColor Green
+        Write-Host "         Executing Selected Tweaks & Debloat       " -ForegroundColor Green
         Write-Host "===================================================" -ForegroundColor Green
         Write-Host ""
+
+        # Handle System Restore Point creation if checked
+        if ($RestorePointChk.Checked) {
+            Write-Host "[+] Creating System Restore Point..." -ForegroundColor Cyan
+            try {
+                Enable-ComputerRestore -Drive "$env:SystemDrive" -ErrorAction SilentlyContinue
+                Checkpoint-Computer -Description "Pre-Debloat System Checkpoint" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
+                Write-Host "    [✓] Restore Point created successfully." -ForegroundColor Green
+            } catch {
+                Write-Host "    (!) Could not create Restore Point: $_" -ForegroundColor Yellow
+            }
+            Write-Host ""
+        }
+
+        # Set Process-Level Execution Policy Bypass so all child scripts execute reliably
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 
         foreach ($ScriptPath in $SelectedScripts) {
             $ScriptName = [System.IO.Path]::GetFileName($ScriptPath)
